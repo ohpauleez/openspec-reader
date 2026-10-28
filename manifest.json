@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "description": "Read Markdown, OpenSpec, Alloy, Java, and JML with diagrams, definition outlines, documentation, contracts, and folding.",
   "permissions": ["storage", "scripting", "activeTab"],
+  "optional_permissions": ["nativeMessaging"],
   "host_permissions": ["file:///*"],
   "optional_host_permissions": ["http://*/*", "https://*/*"],
   "background": { "scripts": ["background.js"] },

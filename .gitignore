@@ -2,3 +2,4 @@ node_modules/
 dist/
 artifacts/
 test-results/
+native/build/

@@ -12,8 +12,15 @@
     "check": "npm run typecheck && npm test && npm run build",
     "lint:extension": "web-ext lint --source-dir dist",
     "package": "npm run build && web-ext build --source-dir dist --artifacts-dir artifacts --overwrite-dest",
+    "alloy:build-native": "tsx scripts/native-build.ts",
+    "alloy:install": "npm run alloy:build-native && tsx scripts/native-install.ts",
+    "test:alloy-native": "npm run alloy:build-native && tsx tests/alloy-native.ts",
+    "test:alloy-explorer": "tsx tests/alloy-explorer-browser.ts",
+    "test:alloy-focus": "tsx tests/alloy-focus-browser.ts",
+    "test:alloy-timeline": "tsx tests/alloy-timeline-browser.ts",
+    "test:alloy-live": "npm run alloy:build-native && tsx tests/alloy-live-browser.ts",
     "start": "web-ext run --source-dir dist --start-url about:blank",
-    "test:browser": "tsx tests/browser.ts && tsx tests/presentation.ts && tsx tests/alloy-browser.ts && tsx tests/java-browser.ts && tsx tests/java-formatting-browser.ts"
+    "test:browser": "tsx tests/browser.ts && tsx tests/presentation.ts && tsx tests/alloy-browser.ts && tsx tests/java-browser.ts && tsx tests/java-formatting-browser.ts && tsx tests/alloy-explorer-browser.ts && tsx tests/alloy-focus-browser.ts && tsx tests/alloy-timeline-browser.ts"
   },
   "dependencies": {
     "@codemirror/commands": "^6.8.1",
@@ -36,6 +43,7 @@
     "@lezer/common": "^1.5.4",
     "@lezer/highlight": "^1.2.1",
     "dompurify": "^3.2.6",
+    "elkjs": "^0.12.1",
     "markdown-it": "^14.1.0",
     "markdown-it-task-lists": "^2.1.1",
     "mermaid": "^12.2.0",
@@ -45,6 +53,7 @@
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^22.15.0",
     "@types/webextension-polyfill": "^0.12.1",
+    "@xmldom/xmldom": "^0.9.12",
     "esbuild": "^0.28.2",
     "fast-check": "^4.1.1",
     "playwright": "1.64.1",

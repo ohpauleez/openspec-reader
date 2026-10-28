@@ -1,5 +1,8 @@
 import browser from 'webextension-polyfill';
 import { isReaderUrl } from './detection';
+import { registerAlloyExplorer } from './alloy-viz/background';
+
+registerAlloyExplorer();
 
 /** Injection is idempotent in the content entry point; missing host access is an expected no-op. */
 async function inject(tabId: number, url: string): Promise<void> {

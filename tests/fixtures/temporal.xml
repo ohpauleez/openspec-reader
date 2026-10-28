@@ -1,0 +1,23 @@
+<alloy builddate="2025-01-09T08:17:18.350Z">
+  <instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="4" command="Run sample for 4 steps, exactly 1 Node" filename="temporal.als" tracelength="2" looplength="2">
+    <sig label="seq/Int" ID="0" parentID="1" builtin="yes"/>
+    <sig label="Int" ID="1" parentID="2" builtin="yes"/>
+    <sig label="String" ID="3" parentID="2" builtin="yes"/>
+    <sig label="this/Node" ID="4" parentID="2"><atom label="Node$0"/></sig>
+    <sig label="this/Clock" ID="5" parentID="2" one="yes"><atom label="Clock$0"/></sig>
+    <field label="active" ID="6" parentID="5" var="yes"><types><type ID="5"/><type ID="4"/></types></field>
+    <field label="messages" ID="7" parentID="5" var="yes"><types><type ID="5"/><type ID="4"/><type ID="4"/></types></field>
+    <sig label="univ" ID="2" builtin="yes"/>
+  </instance>
+  <instance bitwidth="4" maxseq="4" mintrace="1" maxtrace="4" command="Run sample for 4 steps, exactly 1 Node" filename="temporal.als" tracelength="2" looplength="2">
+    <sig label="seq/Int" ID="0" parentID="1" builtin="yes"/>
+    <sig label="Int" ID="1" parentID="2" builtin="yes"/>
+    <sig label="String" ID="3" parentID="2" builtin="yes"/>
+    <sig label="this/Node" ID="4" parentID="2"><atom label="Node$0"/></sig>
+    <sig label="this/Clock" ID="5" parentID="2" one="yes"><atom label="Clock$0"/></sig>
+    <field label="active" ID="6" parentID="5" var="yes"><tuple><atom label="Clock$0"/><atom label="Node$0"/></tuple><types><type ID="5"/><type ID="4"/></types></field>
+    <field label="messages" ID="7" parentID="5" var="yes"><tuple><atom label="Clock$0"/><atom label="Node$0"/><atom label="Node$0"/></tuple><types><type ID="5"/><type ID="4"/><type ID="4"/></types></field>
+    <sig label="univ" ID="2" builtin="yes"/>
+  </instance>
+  <source filename="temporal.als" content="module temporal&#10;&#10;sig Node {}&#10;one sig Clock { var active: set Node, var messages: Node -&gt; Node }&#10;fact behavior {&#10; no Clock.active&#10; always Clock.active&apos; = Node - Clock.active&#10; always Clock.messages = Clock.active -&gt; Clock.active&#10;}&#10;run sample { some Node } for exactly 1 Node, 4 steps&#10;"/>
+</alloy>

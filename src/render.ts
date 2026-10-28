@@ -11,6 +11,7 @@ import { attachSearch } from './search';
 import { renderSource } from './source-render';
 import type { SourceDocument } from './source-render';
 import { codeViewport } from './code-viewport';
+import { openExplorer, markdownLaunch } from './alloy-viz/launch';
 
 type ReaderModel = DocumentModel | SourceDocument;
 
@@ -156,6 +157,7 @@ function hydrateFences(model: DocumentModel, article: HTMLElement, blocks: Searc
       const code = createCodeView(fence, dark, saved?.code[key] ?? [], changed);
       codes.push(code);
       placeholder.replaceWith(code.element);
+      if (fence.language === 'alloy' || fence.language === 'als') code.element.querySelector('.osr-code-tools')!.append(button('Explore model', () => { void openExplorer(markdownLaunch(model, fence.id)); }));
       blocks.push({ element: code.element, text: fence.source, line: fence.line, revealOffset: code.revealOffset });
     }
   }

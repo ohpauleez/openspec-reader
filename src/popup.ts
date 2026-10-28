@@ -3,6 +3,7 @@ import { attachLocalPermission } from './permissions';
 
 /** Origin access is explicit and optional; local file access is the default foundation. */
 async function setup(): Promise<void> {
+  document.querySelector('#explore-alloy')!.addEventListener('click', () => { void browser.tabs.create({ url: browser.runtime.getURL('alloy.html') }); });
   attachLocalPermission();
   document.querySelector('#settings')!.addEventListener('click', () => { void browser.runtime.openOptionsPage(); });
   const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
