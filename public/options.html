@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>OpenSpec Reader settings</title><link rel="stylesheet" href="settings.css"></head>
+<body><main><h1>OpenSpec Reader</h1><p>Local Markdown. Structured specs. A quieter reading experience.</p>
+<form id="settings">
+<label>Color theme<select name="theme"><option value="auto">Follow system</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+<label>OpenSpec presentation<select name="specMode"><option value="auto">Detect by path and document structure</option><option value="always">Enable for every document</option><option value="never">Plain Markdown presentation</option></select></label>
+<label>Reading width<select name="width"><option value="comfortable">Comfortable</option><option value="wide">Wide</option></select></label>
+<label><input type="checkbox" name="keywords"> Format EARS clauses and highlight EARS, RFC 2119, and Gherkin keywords</label>
+<label><input type="checkbox" name="diagnostics"> Show structural spec diagnostics</label>
+<label><input type="checkbox" name="remember"> Remember scroll position and folds</label>
+<button type="submit">Save settings</button><span id="status" role="status"></span>
+</form>
+<h2>Reading local files</h2><p>Open a Markdown document or <code>.als</code>, <code>.java</code>, or <code>.jml</code> source file using its <code>file:///…</code> URL. The reader keeps the original URL and resolves links and images relative to the file.</p><button id="local-files" type="button">Enable local files</button>
+<p>Firefox must display these files as text instead of downloading them. On Linux, see the MIME setup instructions in the project README, including the <code>als</code>, <code>java</code>, and <code>jml</code> extensions.</p>
+<h2>Optional website access</h2><p>HTTP(S) documents are supported when you grant access to their origin from the extension popup. Only text Markdown documents are rendered.</p>
+<h2>Reading state</h2><p>Up to 40 documents are remembered locally. Source text is never stored in reading state.</p><button id="clear-state" type="button">Clear saved reading positions and folds</button>
+</main><script src="options.js"></script></body></html>

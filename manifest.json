@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "OpenSpec Markdown Reader",
+  "version": "0.1.0",
+  "description": "Read Markdown, OpenSpec, Alloy, Java, and JML with diagrams, definition outlines, documentation, contracts, and folding.",
+  "permissions": ["storage", "scripting", "activeTab"],
+  "host_permissions": ["file:///*"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"],
+  "background": { "scripts": ["background.js"] },
+  "content_scripts": [{
+    "matches": ["file:///*"], "js": ["content.js"], "css": ["reader.css"],
+    "run_at": "document_end"
+  }],
+  "action": {
+    "default_title": "OpenSpec Markdown Reader",
+    "default_popup": "popup.html",
+    "default_icon": "icon.svg"
+  },
+  "icons": { "48": "icon.svg", "96": "icon.svg" },
+  "options_ui": { "page": "options.html", "open_in_tab": true },
+  "web_accessible_resources": [{
+    "resources": ["reader.js", "chunks/*.js"],
+    "matches": ["file:///*", "http://*/*", "https://*/*"]
+  }],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "openspec-reader@local.markdown",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": { "required": ["none"] }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+package example;
+
+/** External specification for {@code Counter}. */
+public class Counter {
+    private /*@ spec_public @*/ int value;
+
+    //@ public invariant value >= 0;
+
+    /*@ public normal_behavior
+      @ requires initial >= 0;
+      @ assignable value;
+      @ ensures value == initial;
+      @*/
+    public Counter(int initial);
+
+    /**
+     * Reads the current value.
+     * @return the counter value
+     */
+    /*@ public normal_behavior
+      @ assignable \nothing;
+      @ ensures \result == value;
+      @*/
+    public /*@ spec_pure @*/ int size();
+
+    /*@ public normal_behavior
+      @ requires 0 <= amount <= Integer.MAX_VALUE - value;
+      @ assignable value;
+      @ ensures value == \old(value) + amount;
+      @ ensures \result == value;
+      @*/
+    public int add(int amount);
+}
