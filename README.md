@@ -1,4 +1,4 @@
-# OpenSpec Markdown Reader
+# OpenSpec Reader
 
 **Read your specs as documents, not text files. Explore your models as running systems.**
 
