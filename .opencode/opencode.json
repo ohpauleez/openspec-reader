@@ -1,0 +1,40 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "update": "disable",
+    "share": "disabled",
+    "snapshots": false,
+    "default_agent": "plan",
+    "permissions": [
+        {
+            "action": "external_directory",
+            "resource": "*",
+            "effect": "ask"
+        }
+    ],
+    "mcp": {
+        "servers": {
+            "docfork": {
+                "type": "remote",
+                "url": "https://mcp.docfork.com/mcp",
+                "disabled": true
+            },
+            "gh_grep": {
+                "type": "remote",
+                "url": "https://mcp.grep.app",
+                "disabled": true
+            }
+        }
+    },
+    "lsp": {
+        "alloy-lsp": {
+            "command": ["java", "-jar", "./opt/alloy_v6.2.0.jar", "lsp"],
+            "extensions": [".als"]
+        }
+    },
+    "references": {
+        "steering": {
+            "path": "./steering",
+            "description": "Use for steering agent behavior when planning or designing, implementing plans or specifications, or improving testing or verification"
+        }
+    }
+}
