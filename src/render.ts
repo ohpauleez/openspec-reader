@@ -130,7 +130,11 @@ function createSection(model: DocumentModel, section: Section): SectionElements 
   const summary = element('summary');
   const heading = document.createElement(`h${section.depth}`);
   const children = model.tokens[section.tokenIndex + 1]?.children ?? [];
-  heading.append(markdownFragment(model.parser.renderer.renderInline(children, model.parser.options, {})));
+  const text = element('span', 'osr-heading-text');
+  // Keep source-line hover text off the section controls and generated badge.
+  text.title = `Line: ${section.line}`;
+  text.append(markdownFragment(model.parser.renderer.renderInline(children, model.parser.options, {})));
+  heading.append(text);
   if (section.identity) heading.append(element('span', 'osr-id-label', section.kind));
   const permalink = element('a', 'osr-permalink', '#');
   permalink.href = `#${section.id}`;

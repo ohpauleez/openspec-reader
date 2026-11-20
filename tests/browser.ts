@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { resolve } from 'node:path';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, mkdtemp, writeFile, rm } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
+import type { Page } from 'playwright';
 import { launchExtension } from './firefox';
 
 const session = await launchExtension();
@@ -11,6 +12,7 @@ try {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   page.on('console', (message) => { if (message.type() === 'error') console.error('Browser:', message.text()); });
+  await checkHeadingTooltips(page);
   const url = pathToFileURL(resolve('tests/fixtures/reader.md')).href;
   await page.goto(url);
   try { await page.waitForSelector('html[data-osr-reader="ready"]'); }
@@ -90,4 +92,48 @@ try {
   console.log('Firefox extension checks passed: file URLs, five languages, OpenSpec, Mermaid, search, state, relative resources, sanitization, and real corpus.');
 } finally {
   await session.close();
+}
+
+/** Check original-file lines and tooltip boundaries in real Markdown and OpenSpec rendering. */
+async function checkHeadingTooltips(page: Page): Promise<void> {
+  const temp = await mkdtemp('/tmp/opencode/openspec-reader-headings-');
+  const lines = [
+    '---', 'title: Heading tooltips', '---', '',
+    '# Heading *emphasis* `code` [H-1]', '', '',
+    'Setext heading', '--------------', '', 'Nested prose.',
+    '###### Deep heading', '',
+  ];
+  try {
+    for (const [name, newline] of [['notes.md', '\n'], ['spec.md', '\r\n']]) {
+      const file = resolve(temp, name);
+      await writeFile(file, lines.join(newline));
+      await page.goto(pathToFileURL(file).href);
+      await page.waitForSelector('html[data-osr-reader="ready"]');
+      const sections = page.locator('.osr-section');
+      assert.equal(await sections.count(), 3);
+      for (const [index, line] of [5, 8, 12].entries()) {
+        const section = sections.nth(index);
+        const text = section.locator(':scope > summary > :is(h1,h2,h3,h4,h5,h6) > .osr-heading-text');
+        await text.hover();
+        assert.equal(await text.getAttribute('title'), `Line: ${line}`);
+        assert.equal(await text.evaluate((node) => node.parentElement!.closest('[title]') === null), true);
+        const permalink = section.locator(':scope > summary > .osr-permalink');
+        await permalink.hover();
+        assert.equal(await permalink.getAttribute('title'), `Link to ${lines[line - 1].replace(/^#+ /, '')}`);
+        assert.equal(await permalink.evaluate((node) => node.parentElement!.closest('[title]') === null), true);
+      }
+      const first = sections.first();
+      assert.equal(await first.locator('.osr-heading-text em').textContent(), 'emphasis');
+      assert.equal(await first.locator('.osr-heading-text code').textContent(), 'code');
+      const badge = first.locator('.osr-id-label');
+      assert.equal(await badge.evaluate((node) => node.closest('[title]') === null), true);
+      await first.locator(':scope > summary > h1 > .osr-heading-text').click();
+      assert.equal(await first.getAttribute('open'), null);
+      await first.locator(':scope > summary > .osr-permalink').click();
+      await page.waitForURL(/#heading-emphasis-code-h-1$/);
+      assert.equal(await first.getAttribute('open'), '');
+    }
+  } finally {
+    await rm(temp, { recursive: true, force: true });
+  }
 }
